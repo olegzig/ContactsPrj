@@ -56,7 +56,7 @@ namespace ContactsPrj
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Contacts}/{action=Index}/{id?}");
             });
         }
     }
