@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ContactsPrj.Data;
+using ContactsPrj.Models;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ContactsPrj.Data;
-using ContactsPrj.Models;
 
 namespace ContactsPrj.Controllers
 {
@@ -28,7 +27,7 @@ namespace ContactsPrj.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(contact);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Contacts
@@ -37,28 +36,48 @@ namespace ContactsPrj.Controllers
             return View(await _context.Contact.ToListAsync());
         }
 
-
-
-        // GET: Contacts/Create
-        public IActionResult Create()
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var contact = await _context.Contact.FirstOrDefaultAsync(x => x.Id == id);
+            if (contact == null)
+            {
+                return NotFound();
+            }
+
+            _context.Contact.Remove(contact);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // POST: Contacts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,MobilePhone,JobTitle,BirthDate")] Contact contact)
+        public async Task<IActionResult> Change([Bind("Id,Name,MobilePhone,JobTitle,BirthDate")] Contact contact)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contact);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Update(contact);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ContactExists(contact.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
-            return View(contact);
+            return RedirectToAction(nameof(Index));
         }
 
         private bool ContactExists(int id)

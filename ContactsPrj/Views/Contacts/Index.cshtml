@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
+@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
 
 <h1>Index</h1>
 
@@ -32,7 +33,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr id="row_@item.Id">
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -46,10 +47,10 @@
                     @Html.DisplayFor(modelItem => item.BirthDate)
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changeModalCenter" onclick="ConfirmChange('@item.Name', @item.MobilePhone, '@item.JobTitle', '@item.BirthDate', @item.Id)">
                         Изменить
                     </button> |
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" onclick="ConfirmDelete(@item.Id)">
                         Удалить
                     </button>
                 </td>
@@ -72,8 +73,8 @@
                     <div class="form-group">
                         <input class="form-control my-1" placeholder="Имя" type="text" id="name" name="Name" />
                         <input class="form-control my-1" placeholder="Телефон" type="tel" id="number" name="MobilePhone" />
-                        <input class="form-control my-1" placeholder="Должность" type="text" id="jobTitle" name="JobTitle"/>
-                        <input class="form-control my-1" placeholder="Дата рождения" type="date" id="birthDate" name="BirthDate"/>
+                        <input class="form-control my-1" placeholder="Должность" type="text" id="jobTitle" name="JobTitle" />
+                        <input class="form-control my-1" placeholder="Дата рождения" type="date" id="birthDate" name="BirthDate" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -97,7 +98,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Изменить
+                    <div class="form-group">
+                        <input class="hide" type="hidden" id="idToEdit" name="Id"/>
+                        <input class="form-control my-1" placeholder="Имя" type="text" id="nameToEdit" name="Name"/>
+                        <input class="form-control my-1" placeholder="Телефон" type="tel" id="numberToEdit" name="MobilePhone"/>
+                        <input class="form-control my-1" placeholder="Должность" type="text" id="jobTitleToEdit" name="JobTitle"/>
+                        <input class="form-control my-1" placeholder="Дата рождения" type="date" id="birthDateToEdit" name="BirthDate" onchange="debug()"/>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -107,7 +114,7 @@
         </div>
     </div>
 </form>
-<!-- addModal -->
+<!-- deleteModal -->
 <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -118,11 +125,48 @@
                 </button>
             </div>
             <div class="modal-body">
+                Вы уверены что хотите удалить?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Сохранить</button>
+                <button type="submit" class="btn btn-danger" onclick="DeleteContact()">Удалить</button>
             </div>
         </div>
     </div>
+    <input type="hidden" id="hiddenContactId" />
 </div>
+
+<script>
+    var ConfirmDelete = function (ContactId) {
+        $("#hiddenContactId").val(ContactId);
+        $("#deleteModalCenter").modal('show');
+    }
+    var ConfirmChange = function (Name, Phone, JobTitle, BirthDate, Id) {
+        $("#nameToEdit").val(Name);
+        $("#numberToEdit").val(Phone);
+        $("#jobTitleToEdit").val(JobTitle);
+        $("#idToEdit").val(Id);
+
+        var stringdate = BirthDate.substring(6, 10) + "-" + BirthDate.substring(3, 5) + "-" + BirthDate.substring(0, 2);
+        console.log(stringdate);
+        $("#birthDateToEdit").val(stringdate);
+
+        console.log("edit begin successeful");
+    }
+
+    var DeleteContact = function () {
+        console.log("x")
+        var hidId = $("#hiddenContactId").val();
+
+        $.ajax({
+
+            type: "POST",
+            url: "/Contacts/Delete",
+            data: { id: hidId },
+            success: function (result) {
+                $("#deleteModalCenter").modal("hide");
+                $("#row_" + hidId).remove();
+            }
+        })
+    }
+</script>

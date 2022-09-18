@@ -18,6 +18,7 @@ namespace ContactsPrj.Models
         public string JobTitle { get; set; }
 
         [Display(Name = "Дата рождения")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime BirthDate { get; set; }
     }
 }
