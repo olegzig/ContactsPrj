@@ -6,7 +6,7 @@ namespace ContactsPrj.Models
     public class Contact
     {
         [Display(Name = "Id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Имя")]
         public string Name { get; set; }

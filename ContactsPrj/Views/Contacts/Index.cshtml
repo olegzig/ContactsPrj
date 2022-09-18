@@ -51,57 +51,62 @@
                     </button> |
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                         Удалить
-                    </button>>
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 <!-- addModal -->
-<div class="modal fade" id="addModalCenter" tabindex="-1" role="dialog" aria-labelledby="addModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addModalLongTitle">Добавить</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <input class="form-control my-1" placeholder="Имя" type="text" id="name" />
-                    <input class="form-control my-1" placeholder="Телефон" type="tel" id="number"/>
-                    <input class="form-control my-1" placeholder="Должность" type="text" id="jobTitle" />
-                    <input class="form-control my-1" placeholder="Дата рождения" type="date" id="BirthDate" />
+<form asp-action="CreateNew">
+    <div class="modal fade" id="addModalCenter" tabindex="-1" role="dialog" aria-labelledby="addModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLongTitle">Добавить</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control my-1" placeholder="Имя" type="text" id="name" name="Name" />
+                        <input class="form-control my-1" placeholder="Телефон" type="tel" id="number" name="MobilePhone" />
+                        <input class="form-control my-1" placeholder="Должность" type="text" id="jobTitle" name="JobTitle"/>
+                        <input class="form-control my-1" placeholder="Дата рождения" type="date" id="birthDate" name="BirthDate"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Сохранить</button>
-            </div>
         </div>
     </div>
-</div>
+</form>
+
 <!-- changeModal -->
-<div class="modal fade" id="changeModalCenter" tabindex="-1" role="dialog" aria-labelledby="changeModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changeModalLongTitle">Изменить</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Изменить
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Сохранить</button>
+<form asp-action="Change">
+    <div class="modal fade" id="changeModalCenter" tabindex="-1" role="dialog" aria-labelledby="changeModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeModalLongTitle">Изменить</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Изменить
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 <!-- addModal -->
 <div class="modal fade" id="deleteModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -113,7 +118,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
