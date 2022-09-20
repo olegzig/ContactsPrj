@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Index";
 }
-@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
 
 <h1>Index</h1>
 
@@ -59,7 +58,7 @@
     </tbody>
 </table>
 <!-- addModal -->
-<form asp-action="CreateNew">
+<form asp-action="CreateNew" class="needs-validation" novalidate>
     <div class="modal fade" id="addModalCenter" tabindex="-1" role="dialog" aria-labelledby="addModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -71,15 +70,39 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input class="form-control my-1" placeholder="Имя" type="text" id="name" name="Name" />
-                        <input class="form-control my-1" placeholder="Телефон" type="tel" id="number" name="MobilePhone" />
-                        <input class="form-control my-1" placeholder="Должность" type="text" id="jobTitle" name="JobTitle" />
-                        <input class="form-control my-1" placeholder="Дата рождения" type="date" id="birthDate" name="BirthDate" />
+                        <div class="position-relative">
+                            <label for="validationName" class="form-label">Имя</label>
+                            <input class="form-control my-1" placeholder="Имя" type="text" id="name" name="Name" required />
+                            <div class="invalid-tooltip">
+                                Введите имя контакта.
+                            </div>
+                        </div>
+                        <div class="position-relative">
+                            <label for="validatioPhone" class="form-label">Телефон</label>
+                            <input class="form-control my-1" placeholder="Телефон" type="tel" id="number" name="MobilePhone" required pattern="^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$"/>
+                            <div class="invalid-tooltip">
+                                Введите корректный телефонный номер.
+                            </div>
+                        </div>
+                        <div class="position-relative">
+                            <label for="validationJob" class="form-label">Должность</label>
+                            <input class="form-control my-1" placeholder="Должность" type="text" id="jobTitle" name="JobTitle" required oninput="validateJobAdd()" pattern="^[a-zA-ZА-Яа-я _]+$"/>
+                            <div class="invalid-tooltip">
+                                <p id="invalidJobAdd" class="m-0"></p>
+                            </div>
+                        </div>
+                        <div class="position-relative">
+                            <label for="validationBirth" class="form-label">Дата рождения</label>
+                            <input class="form-control my-1" placeholder="Дата рождения" type="date" id="birthDate" name="BirthDate" required />
+                            <div class="invalid-tooltip">
+                                Введите дату рождения.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" class="btn btn-primary" onclick="validateJobAdd()">Сохранить</button>
                 </div>
             </div>
         </div>
@@ -87,7 +110,7 @@
 </form>
 
 <!-- changeModal -->
-<form asp-action="Change">
+<form asp-action="Change" class="needs-validation" novalidate>
     <div class="modal fade" id="changeModalCenter" tabindex="-1" role="dialog" aria-labelledby="changeModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -99,16 +122,40 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input class="hide" type="hidden" id="idToEdit" name="Id"/>
-                        <input class="form-control my-1" placeholder="Имя" type="text" id="nameToEdit" name="Name"/>
-                        <input class="form-control my-1" placeholder="Телефон" type="tel" id="numberToEdit" name="MobilePhone"/>
-                        <input class="form-control my-1" placeholder="Должность" type="text" id="jobTitleToEdit" name="JobTitle"/>
-                        <input class="form-control my-1" placeholder="Дата рождения" type="date" id="birthDateToEdit" name="BirthDate" onchange="debug()"/>
+                        <input class="hide" type="hidden" id="idToEdit" name="Id" />
+                        <div class="position-relative">
+                            <label for="validationName" class="form-label">Имя</label>
+                            <input class="form-control my-1" placeholder="Имя" type="text" id="nameToEdit" name="Name" required />
+                            <div class="invalid-tooltip">
+                                Введите имя.
+                            </div>
+                        </div>
+                        <div class="position-relative">
+                            <label for="validationPhone" class="form-label">Телефон</label>
+                            <input class="form-control my-1" placeholder="Телефон" type="tel" id="numberToEdit" name="MobilePhone" required pattern="^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$"/>
+                            <div class="invalid-tooltip">
+                                Введите корректный телефонный номер.
+                            </div>
+                        </div>
+                        <div class="position-relative">
+                            <label for="validationJob" class="form-label">Должность</label>
+                            <input class="form-control my-1 jobValidate" placeholder="Должность" type="text" id="jobTitleToEdit" name="JobTitle" required oninput="validateJobEdit()" pattern="^[a-zA-ZА-Яа-я _]+$"/>
+                            <div class="invalid-tooltip">
+                                <p id="invalidJobEdit" class="m-0"></p>
+                            </div>
+                        </div>
+                        <div class="position-relative">
+                            <label for="validationBirth" class="form-label">Дата рождения</label>
+                            <input class="form-control my-1" placeholder="Дата рождения" type="date" id="birthDateToEdit" name="BirthDate" required />
+                            <div class="invalid-tooltip">
+                                Введите дату рождения.
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" class="btn btn-primary" onclick="validateJobEdit()">Сохранить</button>
                 </div>
             </div>
         </div>
@@ -169,4 +216,53 @@
             }
         })
     }
+    //validating
+    function validateJobAdd() {
+        //invalidJob
+        var x = document.getElementById('jobTitle');
+        jobValidate(x);
+    }
+    function validateJobEdit() {
+        //invalidJob
+        var x = document.getElementById('jobTitleToEdit');
+        jobValidate(x);
+    }
+    function jobValidate(x) {
+        var text = '';
+        if (x.validity.valueMissing) {
+            console.log('ПУСТО');
+            text = "Заполните поле.";
+        }
+        if (x.validity.patternMismatch) {
+            console.log('Текст ' + x.value + ' не норм');
+            text = "Введите должность";
+        }
+        console.log(text);
+
+        if (x === document.getElementById('jobTitle'))
+            $("#invalidJobAdd").text(text);
+        else
+            $("#invalidJobEdit").text(text);
+    }
+
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
 </script>
