@@ -228,11 +228,9 @@
     function jobValidate(x) {
         var text = '';
         if (x.validity.valueMissing) {
-            console.log('ПУСТО');
             text = "Заполните поле.";
         }
         if (x.validity.patternMismatch) {
-            console.log('Текст ' + x.value + ' не норм');
             text = "Введите должность";
         }
         console.log(text);
